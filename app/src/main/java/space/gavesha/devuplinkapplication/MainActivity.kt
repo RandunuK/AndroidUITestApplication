@@ -1,14 +1,15 @@
 package space.gavesha.devuplinkapplication
 
+import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
@@ -17,14 +18,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.union
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -39,10 +39,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -65,11 +68,7 @@ class MainActivity : ComponentActivity() {
         if (resources.getBoolean(R.bool.portrait_only)) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(
-                scrim = android.graphics.Color.BLACK,
-            )
-        )
+        enableEdgeToEdge()
         setContent {
             DevUpLinkApplicationTheme {
                 BottomNavigationBar()
@@ -107,12 +106,6 @@ fun BottomNavigationBar(modifier: Modifier = Modifier) {
     }
 
     Scaffold(
-        modifier = modifier.windowInsetsPadding(
-            WindowInsets.statusBars
-                .union(WindowInsets.displayCutout)
-                .only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
-        ),
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             TitleSearchBar(state = searchState, modifier = modifier)
         },
@@ -186,6 +179,7 @@ fun BottomNavigationBar(modifier: Modifier = Modifier) {
                 .padding(contentPadding)
         )
     }
+
 }
 
 @Composable

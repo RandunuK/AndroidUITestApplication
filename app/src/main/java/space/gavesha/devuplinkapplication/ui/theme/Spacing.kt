@@ -14,6 +14,7 @@ object Spacing {
     val dp24 = 24.dp
     val dp32 = 32.dp
     val dp40 = 40.dp
+    val dp84 = 84.dp
 
     val screenPadding = dp16
     val optionBarHorizontalPadding = dp16
@@ -24,6 +25,7 @@ object Spacing {
     val listItemBottomPadding = dp2
     val cardElevation = dp2
     val cardPadding = dp20
+    val contactListContentPadding = dp84
 }
 
 val LocalSpacing = staticCompositionLocalOf { Spacing }

@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -51,6 +53,7 @@ internal fun ContactsScreenContent(contactsUiState: ContactsUiState, modifier: M
     ) {
         SecondaryTabRow(
             selectedTabIndex = selectedTabIndex,
+            containerColor = AppTheme.colors.background,
         ) {
             tabs.forEachIndexed { index, title ->
                 val isSelected = selectedTabIndex == index
@@ -88,7 +91,7 @@ private fun ContactsTab(uiState: ContactsTabContentUiState) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize(),
-                contentPadding = PaddingValues(bottom = 2.dp),
+                contentPadding = PaddingValues(bottom = AppTheme.spacing.contactListContentPadding),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 items(
@@ -107,7 +110,6 @@ private fun ContactsTab(uiState: ContactsTabContentUiState) {
 
 @Composable
 private fun ContactGroupsTab(modifier: Modifier = Modifier) {
-    Text("Contact groups")
     Column(
         Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,

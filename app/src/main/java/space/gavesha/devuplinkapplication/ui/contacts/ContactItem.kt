@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,14 +35,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import space.gavesha.devuplinkapplication.R
 import space.gavesha.devuplinkapplication.doamin.model.Contact
 import space.gavesha.devuplinkapplication.ui.theme.AppTheme
 import space.gavesha.devuplinkapplication.ui.theme.DevUpLinkApplicationTheme
-import space.gavesha.devuplinkapplication.ui.theme.Spacing
 import space.gavesha.devuplinkapplication.ui.theme.getScaledFontSize
 
 

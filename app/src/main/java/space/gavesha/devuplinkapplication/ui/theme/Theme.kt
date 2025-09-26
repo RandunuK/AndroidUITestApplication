@@ -3,7 +3,6 @@ package space.gavesha.devuplinkapplication.ui.theme
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -11,40 +10,17 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.sp
 
 
 private val LightColorScheme = lightColorScheme(
     background = White,
     primary = Black300,
-    primaryContainer = Black300,
-    onPrimaryContainer = White,
-    secondary = White,
-    onSecondary = Black400,
-    tertiary = Black300,
-    surface = White,
-    onSurface = Black500,
-    outline = Black400,
-    secondaryContainer = White,
-    onSecondaryContainer = Black400,
 )
 
 private val DarkColorScheme = darkColorScheme(
     background = Black500,
     primary = Black250,
-    primaryContainer = Black250,
-    onPrimaryContainer = White,
-    secondary = Black300,
-    onSecondary = Black500,
-    tertiary = Black250,
-    surface = Black500,
-    onSurface = White,
-    outline = Black300,
-    secondaryContainer = Black500,
-    onSecondaryContainer = White800,
 )
 
 @Composable

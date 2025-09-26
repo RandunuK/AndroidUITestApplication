@@ -3,11 +3,15 @@ package space.gavesha.devuplinkapplication.ui.common.search
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -18,12 +22,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import space.gavesha.devuplinkapplication.R
 import space.gavesha.devuplinkapplication.ui.theme.AppTheme
 
@@ -33,16 +38,17 @@ internal fun TitleSearchBar(
     modifier: Modifier = Modifier,
     onIntent: (TitleSearchBarIntent) -> Unit = {}
 ) {
+    val topAppBarHeight = TopAppBarDefaults.TopAppBarExpandedHeight
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(64.dp),
+            .windowInsetsPadding(WindowInsets.statusBars),
         color = AppTheme.colors.background,
     ) {
         Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 4.dp),
+                .height(topAppBarHeight)
+                .padding(end = AppTheme.spacing.dp8),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -55,14 +61,14 @@ internal fun TitleSearchBar(
                     )
                 }
             } else {
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(AppTheme.spacing.dp16))
             }
 
             // Title or Search Field
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 8.dp)
+                    .padding(horizontal = AppTheme.spacing.dp8)
             ) {
                 if (state.isSearchActive) {
                     BasicTextField(
@@ -105,7 +111,7 @@ internal fun TitleSearchBar(
                     }
                 }
             } else {
-                IconButton(onClick = { { onIntent(TitleSearchBarIntent.SearchClicked) } }) {
+                IconButton(onClick = { onIntent(TitleSearchBarIntent.SearchClicked) }) {
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = stringResource(R.string.cd_search)
