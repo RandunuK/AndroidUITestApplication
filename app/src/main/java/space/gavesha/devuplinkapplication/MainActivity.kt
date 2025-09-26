@@ -1,15 +1,17 @@
 package space.gavesha.devuplinkapplication
 
-import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
@@ -24,7 +26,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -33,19 +34,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -81,27 +77,20 @@ class MainActivity : ComponentActivity() {
 fun BottomNavigationBar(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val startDestination = Destination.CONTACTS
-    var selectedDestination by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-
-    val currentTitleRes = when (currentRoute) {
-        Destination.CONTACTS.route -> Destination.CONTACTS.labelRes
-        Destination.MESSAGES.route -> Destination.MESSAGES.labelRes
-        Destination.CALLING.route -> Destination.CALLING.labelRes
-        Destination.NOTIFICATION.route -> Destination.NOTIFICATION.labelRes
-        Destination.MORE.route -> Destination.MORE.labelRes
-        else -> startDestination.labelRes
+    val selectedDestination = remember(currentRoute) {
+        Destination.entries.find { it.route == currentRoute } ?: startDestination
     }
-    val currentTitle = stringResource(currentTitleRes)
 
-    // @TODO
+    val currentTitle = stringResource(startDestination.labelRes)
+
     // searchState should collected from the viewmodel
+    // search functionality not implemented
     var searchState by remember { mutableStateOf(TitleSearchBarUiState(currentTitle)) }
 
     LaunchedEffect(currentRoute) {
         searchState = searchState.copy(title = currentTitle)
-        // @TODO
         // should update tile using viewmodel and searchState should collected from the viewmodel
     }
 
@@ -110,21 +99,32 @@ fun BottomNavigationBar(modifier: Modifier = Modifier) {
             TitleSearchBar(state = searchState, modifier = modifier)
         },
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                containerColor = AppTheme.colors.primaryContainer,
-                contentColor = AppTheme.colors.onPrimaryContainer,
-                shape = RoundedCornerShape(percent = 50),
-                onClick = {
-                    Log.d("FloatingActionButton", "onClick add contact")
-                },
-                icon = {
-                    Icon(
-                        Icons.Filled.Add,
-                        stringResource(R.string.cd_add_new_contact)
-                    )
-                },
-                text = { Text(text = stringResource(R.string.contact)) },
-            )
+            AnimatedVisibility(
+                visible = currentRoute == Destination.CONTACTS.route,
+                enter = slideInVertically(
+                    initialOffsetY = { it / 2 }
+                ) + fadeIn(),
+                exit = slideOutVertically(
+                    targetOffsetY = { it / 2 }
+                ) + fadeOut()
+            ) {
+                ExtendedFloatingActionButton(
+                    containerColor = AppTheme.colors.primaryContainer,
+                    contentColor = AppTheme.colors.onPrimaryContainer,
+                    shape = RoundedCornerShape(percent = 50),
+                    onClick = {
+                        //  Connect to add contact action
+                        //  action can be vary depend on the other screens
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = stringResource(R.string.cd_add_new_contact)
+                        )
+                    },
+                    text = { Text(text = stringResource(R.string.contact)) },
+                )
+            }
         },
         bottomBar = {
             NavigationBar(
@@ -135,7 +135,7 @@ fun BottomNavigationBar(modifier: Modifier = Modifier) {
                     .only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal)
             ) {
                 Destination.entries.forEachIndexed { index, destination ->
-                    val isSelected = selectedDestination == index
+                    val isSelected = selectedDestination == destination
                     val icon = if (isSelected) {
                         destination.selectedIcon
                     } else {
@@ -144,8 +144,13 @@ fun BottomNavigationBar(modifier: Modifier = Modifier) {
                     NavigationBarItem(
                         selected = isSelected,
                         onClick = {
-                            navController.navigate(route = destination.route)
-                            selectedDestination = index
+                            navController.navigate(route = destination.route) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                            }
                         },
                         icon = {
                             Icon(
