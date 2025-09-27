@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,6 +13,7 @@ import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -36,7 +35,10 @@ import space.gavesha.devuplinkapplication.ui.theme.DevUpLinkApplicationTheme
 @Composable
 internal fun ContactScreen(modifier: Modifier = Modifier) {
     val viewModel: ContactViewModel = viewModel()
-    viewModel.fetchContacts()
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchContacts()
+    }
     val contactsUiState = viewModel.uiState.collectAsState()
     ContactsScreenContent(contactsUiState.value, modifier)
 }
